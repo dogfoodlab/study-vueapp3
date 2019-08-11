@@ -1,18 +1,44 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+
+    <Editor
+      width="100%"
+      height="300px"
+      :context="editorContext"
+      @change="onChangeEditor"
+    />
+
+    <div>
+      <v-text-field v-model="inputText" />
+      <v-btn @click="setEditorText">test</v-btn>
+    </div>
+
+    <div>
+      <v-text-field v-model="editorContext.value" />
+    </div>
+
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Editor from '@/components/Editor'
 
 export default {
-  name: 'home',
   components: {
-    HelloWorld
+    Editor
+  },
+  data: () => ({
+    inputText: '',
+    editorContext: { value: undefined }
+  }),
+  methods: {
+    async setEditorText () {
+      // console.log('setEditorText', this.inputText)
+      this.editorContext = { value: this.inputText }
+    },
+    async onChangeEditor (text) {
+      console.log('onChangeEditor', text)
+    }
   }
 }
 </script>
