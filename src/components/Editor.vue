@@ -39,8 +39,7 @@ export default {
     this.$el.style.width = this.width || '100px'
     this.$el.style.height = this.height || '100px'
 
-    const element = this.$refs.editor
-    this.editor = ace.edit(element)
+    this.editor = ace.edit(this.$refs.editor)
 
     this.editor.on('change', async (e) => {
       // console.log(e)
