@@ -4,6 +4,8 @@
     <Editor
       width="100%"
       height="300px"
+      theme="solarized_light"
+      mode="json"
       :context="editorContext"
       @change="onChangeEditor"
     />
@@ -33,10 +35,12 @@ export default {
   components: {
     Editor
   },
-  data: () => ({
-    inputText: '',
-    editorContext: { input: { value: '' }, output: { value: '' } }
-  }),
+  data () {
+    return {
+      inputText: '',
+      editorContext: { input: { value: '' }, output: { value: '' } }
+    }
+  },
   methods: {
     async setEditorText () {
       // console.log('setEditorText', this.inputText)

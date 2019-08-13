@@ -3,12 +3,19 @@
 </template>
 
 <script>
-import ace from 'ace-builds'
+// import ace from 'ace-build'
+import ace from 'ace-builds/src-noconflict/ace'
+import 'ace-builds/src-noconflict/theme-cobalt'
+import 'ace-builds/src-noconflict/theme-solarized_light'
+import 'ace-builds/src-noconflict/mode-json'
+import 'ace-builds/src-noconflict/mode-yaml'
 
 export default {
   props: {
     width: String,
     height: String,
+    theme: String,
+    mode: String,
     context: Object
   },
   watch: {
@@ -17,15 +24,20 @@ export default {
         // console.log('setValue')
         // console.log(val.value, this.editor.getValue())
 
-        if (!val.value && !this.editor.getValue()) {
-          this.$emit('change', this.editor.getValue())
+        const inputValue = val.value
+        const editorValue = this.editor.getValue()
+
+        if (!inputValue && !editorValue) {
+          this.$emit('change', editorValue)
           return
         }
-        if (val.value && this.editor.getValue()) {
+
+        if (inputValue && editorValue) {
           // console.log('lock')
           this.lock = true
         }
-        this.editor.setValue(val.value, -1)
+
+        this.editor.setValue(inputValue, 1)
       }
     }
   },
@@ -36,22 +48,38 @@ export default {
     }
   },
   mounted () {
-    this.$el.style.width = this.width || '100px'
+    this.$el.style.width = this.width || '200px'
     this.$el.style.height = this.height || '100px'
 
-    this.editor = ace.edit(this.$refs.editor)
+    const editor = ace.edit(this.$refs.editor)
+    if (this.theme) {
+      editor.setTheme('ace/theme/' + this.theme)
+    }
 
-    this.editor.on('change', async (e) => {
-      // console.log(e)
+    const session = editor.getSession()
+    session.setUseWorker(false)
+    session.setUseSoftTabs(true)
+    session.setTabSize(2)
+    if (this.mode) {
+      session.setMode('ace/mode/' + this.mode)
+    }
+    editor.setSession(session)
+
+    editor.on('change', async (evt) => {
+      // console.log('change', evt)
       if (this.lock) {
         this.lock = false
         return
       }
       // console.log('ace change')
       // console.log(e)
-      this.context.output.value = this.editor.getValue()
-      this.$emit('change', this.editor.getValue())
+      const editorValue = editor.getValue()
+
+      this.context.output.value = editorValue
+      this.$emit('change', editorValue)
     })
+
+    this.editor = editor
   }
 }
 </script>
