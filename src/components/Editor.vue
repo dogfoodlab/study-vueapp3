@@ -20,11 +20,11 @@ export default {
   },
   watch: {
     'context.input': {
-      handler (val, oldVal) {
+      handler (newVal, oldVal) {
         // console.log('setValue')
         // console.log(val.value, this.editor.getValue())
 
-        const inputValue = val.value
+        const inputValue = newVal.value
         const editorValue = this.editor.getValue()
 
         if (!inputValue && !editorValue) {
