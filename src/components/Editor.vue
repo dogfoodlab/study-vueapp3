@@ -12,14 +12,17 @@ export default {
     context: Object
   },
   watch: {
-    context: {
+    'context.input': {
       handler (val, oldVal) {
         // console.log('setValue')
+        // console.log(val.value, this.editor.getValue())
+
         if (!val.value && !this.editor.getValue()) {
           this.$emit('change', this.editor.getValue())
           return
         }
-        if (this.editor.getValue()) {
+        if (val.value && this.editor.getValue()) {
+          // console.log('lock')
           this.lock = true
         }
         this.editor.setValue(val.value, -1)
@@ -40,12 +43,14 @@ export default {
     this.editor = ace.edit(element)
 
     this.editor.on('change', async (e) => {
+      // console.log(e)
       if (this.lock) {
         this.lock = false
         return
       }
       // console.log('ace change')
       // console.log(e)
+      this.context.output.value = this.editor.getValue()
       this.$emit('change', this.editor.getValue())
     })
   }

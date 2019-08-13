@@ -8,14 +8,20 @@
       @change="onChangeEditor"
     />
 
-    <div>
-      <v-text-field v-model="inputText" />
-      <v-btn @click="setEditorText">test</v-btn>
-    </div>
+    <v-row>
+      <v-col cols="3">
+        <v-text-field v-model="inputText" />
+      </v-col>
+      <v-col>
+        <v-btn @click="setEditorText">Set</v-btn>
+      </v-col>
+    </v-row>
 
-    <div>
-      <v-text-field v-model="editorContext.value" />
-    </div>
+    <v-row>
+      <v-col cols="3">
+        <v-text-field v-model="editorContext.output.value" />
+      </v-col>
+    </v-row>
 
   </div>
 </template>
@@ -29,14 +35,15 @@ export default {
   },
   data: () => ({
     inputText: '',
-    editorContext: { value: undefined }
+    editorContext: { input: { value: '' }, output: { value: '' } }
   }),
   methods: {
     async setEditorText () {
       // console.log('setEditorText', this.inputText)
-      this.editorContext = { value: this.inputText }
+      this.editorContext.input = { value: this.inputText }
     },
     async onChangeEditor (text) {
+      // this.editorContext.output.value = text
       console.log('onChangeEditor', text)
     }
   }
